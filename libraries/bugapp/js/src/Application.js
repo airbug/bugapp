@@ -57,8 +57,9 @@ require('bugpack').context("*", function(bugpack) {
 
         /**
          * @constructs
+         * @param {Object} applicationOptions
          */
-        _constructor: function() {
+        _constructor: function(applicationOptions) {
 
             this._super();
 
@@ -66,6 +67,12 @@ require('bugpack').context("*", function(bugpack) {
             //-------------------------------------------------------------------------------
             // Private Properties
             //-------------------------------------------------------------------------------
+
+            /**
+             * @private
+             * @type {Object}
+             */
+            this.applicationOptions     = applicationOptions;
 
             /**
              * @private
@@ -90,6 +97,13 @@ require('bugpack').context("*", function(bugpack) {
         //-------------------------------------------------------------------------------
         // Getters and Setters
         //-------------------------------------------------------------------------------
+
+        /**
+         * @return {Object}
+         */
+        getApplicationOptions: function() {
+            return this.applicationOptions;
+        },
 
         /**
          * @return {IocContext}
