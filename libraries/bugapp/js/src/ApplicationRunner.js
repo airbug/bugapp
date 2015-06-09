@@ -15,9 +15,8 @@
 //@Export('bugapp.ApplicationRunner')
 
 //@Require('Class')
-//@Require('Exception')
-//@Require('Obj')
-//@Require('ParallelException')
+//@Require('EventDispatcher')
+//@Require('Throwables')
 //@Require('bugapp.Application')
 
 
@@ -38,7 +37,7 @@ require('bugpack').context("*", function(bugpack) {
     //-------------------------------------------------------------------------------
 
     var Class               = bugpack.require('Class');
-    var Obj     = bugpack.require('Obj');
+    var EventDispatcher     = bugpack.require('EventDispatcher');
     var Throwables   = bugpack.require('Throwables');
     var Application         = bugpack.require('bugapp.Application');
 
@@ -51,7 +50,7 @@ require('bugpack').context("*", function(bugpack) {
      * @class
      * @extends {Obj}
      */
-    var ApplicationRunner = Class.extend(Obj, {
+    var ApplicationRunner = Class.extend(EventDispatcher, {
 
         _name: "bugapp.ApplicationRunner",
 
