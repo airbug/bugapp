@@ -240,7 +240,7 @@ require('bugpack').context("*", function(bugpack) {
          * @private
          */
         createApplication: function() {
-            this.application = this.applicationClass.newInstance([this.applicationOptions]);
+            this.application = this.applicationClass.newInstance(this.applicationOptions);
         },
 
         /**
