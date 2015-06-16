@@ -1,10 +1,7 @@
 /*
- * Copyright (c) 2014 airbug Inc. All rights reserved.
+ * Copyright (c) 2015 airbug inc. http://airbug.com
  *
- * All software, both binary and source contained in this work is the exclusive property
- * of airbug Inc. Modification, decompilation, disassembly, or any other means of discovering
- * the source code of this software is prohibited. This work is protected under the United
- * States copyright law and other international copyright treaties and conventions.
+ * bugapp may be freely distributed under the MIT license.
  */
 
 
@@ -30,7 +27,7 @@ require('bugpack').context("*", function(bugpack) {
     // Common Modules
     //-------------------------------------------------------------------------------
 
-    var domain                      = require("domain");
+    var domain              = require("domain");
 
     //-------------------------------------------------------------------------------
     // BugPack
@@ -38,7 +35,7 @@ require('bugpack').context("*", function(bugpack) {
 
     var Class               = bugpack.require('Class');
     var EventDispatcher     = bugpack.require('EventDispatcher');
-    var Throwables   = bugpack.require('Throwables');
+    var Throwables          = bugpack.require('Throwables');
     var Application         = bugpack.require('bugapp.Application');
 
 
@@ -61,10 +58,8 @@ require('bugpack').context("*", function(bugpack) {
 
         /**
          * @constructs
-         * @param {Class} applicationClass
-         * @param {Object} applicationOptions
          */
-        _constructor: function(applicationClass, applicationOptions) {
+        _constructor: function() {
 
             this._super();
 
@@ -77,55 +72,82 @@ require('bugpack').context("*", function(bugpack) {
              * @private
              * @type {Application}
              */
-            this.application        = null;
+            this.application            = null;
 
             /**
              * @private
              * @type {Class}
              */
-            this.applicationClass   = applicationClass;
+            this.applicationClass       = null;
 
             /**
              * @private
              * @type {domain}
              */
-            this.applicationDomain  = null;
+            this.applicationDomain      = null;
 
             /**
              * @private
              * @type {ParallelException}
              */
-            this.applicationException = null;
+            this.applicationException   = null;
 
             /**
              * @private
              * @type {Object}
              */
-            this.applicationOptions   = applicationOptions;
+            this.applicationOptions     = {};
 
             /**
              * @private
              * @type {boolean}
              */
-            this.completeCalled = false;
+            this.completeCalled         = false;
 
             /**
              * @private
              * @type {boolean}
              */
-            this.killTimerRunning = false;
+            this.killTimerRunning       = false;
 
             /**
              * @private
              * @type {function(Throwable=)}
              */
-            this.runCallback          = null;
+            this.runCallback            = null;
 
             /**
              * @private
              * @type {boolean}
              */
-            this.runCalled        = false;
+            this.runCalled              = false;
+        },
+
+
+        //-------------------------------------------------------------------------------
+        // Init Methods
+        //-------------------------------------------------------------------------------
+
+        /**
+         * @param {Class} applicationClass
+         * @return {ApplicationRunner}
+         */
+        initWithClass: function(applicationClass) {
+            this.init();
+            this.applicationClass = applicationClass;
+            return this;
+        },
+
+        /**
+         * @param {Class} applicationClass
+         * @param {Object} applicationOptions
+         * @return {ApplicationRunner}
+         */
+        initWithClassAndOptions: function(applicationClass, applicationOptions) {
+            this.init();
+            this.applicationClass = applicationClass;
+            this.applicationOptions = applicationOptions;
+            return this;
         },
 
 
@@ -240,6 +262,7 @@ require('bugpack').context("*", function(bugpack) {
          */
         createApplication: function() {
             this.application = this.applicationClass.newInstance(this.applicationOptions);
+            this.application.setParentPropagator(this);
         },
 
         /**
